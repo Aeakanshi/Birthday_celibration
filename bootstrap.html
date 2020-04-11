@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<!--   <script type="text/javascript" src="upload.js"></script> -->
+  <style type="text/css">
+  	#upload {
+    opacity: 0;
+}
+
+#upload-label {
+    position: absolute;
+    top: 50%;
+    left: 1rem;
+    transform: translateY(-50%);
+}
+
+.image-area {
+    border: 2px dashed rgba(255, 255, 255, 0.7);
+    padding: 1rem;
+    position: relative;
+}
+
+.image-area::before {
+    content: 'Uploaded image result';
+    color: #fff;
+    font-weight: bold;
+    text-transform: uppercase;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 0.8rem;
+    z-index: 1;
+}
+
+.image-area img {
+    z-index: 2;
+    position: relative;
+}
+
+.preview-images-zone {
+    width: 100%;
+    border: 2px dashed rgba(255, 255, 255, 0.7);
+    min-height: 180px;
+    /* display: flex; */
+    padding: 5px 5px 0px 5px;
+    position: relative;
+    overflow:auto;
+}
+.preview-images-zone > .preview-image:first-child {
+    height: 200px;
+    width: 200px;
+    position: relative;
+    margin-right: 5px;
+}
+.preview-images-zone > .preview-image {
+    /*height: 200px;*/
+    width: 200px;
+    position: relative;
+    margin-right: 5px;
+    float: left;
+    margin-bottom: 5px;
+}
+.preview-images-zone > .preview-image > .image-zone {
+    width: 100%;
+    height: 100%;
+}
+.preview-images-zone > .preview-image > .image-zone > img {
+    width: 100%;
+    height: 100%;
+}
+.preview-images-zone > .preview-image > .tools-edit-image {
+    position: absolute;
+    z-index: 100;
+    color: #fff;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 10px;
+    display: none;
+}
+.preview-images-zone > .preview-image > .image-cancel {
+    font-size: 18px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-weight: bold;
+    margin-right: 10px;
+    cursor: pointer;
+    display: none;
+    z-index: 100;
+}
+.preview-image:hover > .image-zone {
+    cursor: move;
+    opacity: .5;
+}
+.preview-image:hover > .tools-edit-image,
+.preview-image:hover > .image-cancel {
+    display: block;
+}
+.ui-sortable-helper {
+    width: 90px !important;
+    height: 90px !important;
+}
+
+.container {
+    padding-top: 50px;
+}
+  </style>
+</head>
+<body data-spy="scroll" data-target=".navbar" data-offset="50">
+	<!-- nav start -->
+	<nav class="navbar navbar-expand-sm fixed-top " style="background: #ffffff;">
+	  <!-- Brand/logo -->
+	  <a class="navbar-brand" href="#">
+	    <img src="https://lh3.googleusercontent.com/-9aP5J60wKFo/AAAAAAAAAAI/AAAAAAAAAAc/9v9KJeCOalsJLxNKiI6iqWlnvckT0EztQCLcDEAE/s64-c-k-no/photo.jpg" alt="logo" style="width:40px;">
+	  </a>
+	  
+	  <!-- Links -->
+	  <ul class="navbar-nav">
+	    <li class="nav-item">
+	      <a class="nav-link" href="#section1">Name</a>
+	    </li>
+	    <li class="nav-item">
+	      <a class="nav-link" href="#section2">Quotes</a>
+	    </li>
+	    <li class="nav-item">
+	      <a class="nav-link" href="#section3">Grid</a>
+	    </li>
+	  </ul>
+	</nav>
+	<!-- nav end -->
+	<!-- <div class="container-fluid" style=" ">
+	  <h1>My First Bootstrap Page</h1>
+	  <p>This part is inside a .container class.</p> 
+	  <p>The .container class provides a responsive fixed width container.</p>           
+	</div> -->
+	<div id="section1" class="container-fluid" style="padding-top:70px; padding-bottom: 35px; background: #fafafa;">
+		<div class="row" style="justify-content: center;align-items: center;/*! height: 100%; */background: #bf97fc;">
+			<div class="col" style="background: #f8f9fa; ">
+				<div>
+				    <h1 class="text-center px-2 py-2 mb-3 mt-3">Happy Birthday </h1>
+		            <!-- Upload image input-->
+		             <div class="col-lg-8 mx-auto">
+			            <!-- Upload image input-->
+			            <div class="input-group mb-3 px-2 py-2 rounded-pill bg-white shadow-sm">
+			                <input id="upload" type="file" onchange="readURL(this);" class="form-control border-0">
+			                <label id="upload-label" for="upload" class="font-weight-light text-muted">Choose file</label>
+			                <div class="input-group-append">
+			                    <label for="upload" class="btn btn-light m-0 rounded-pill px-4"><small class="text-uppercase font-weight-bold text-muted">Upload</small></label>
+			                </div>
+			            </div>
+		   			</div>
+	   			</div>
+			</div>
+			<div class="col" style="background: #0005ff3d;">
+				<div class="col-lg-12 mx-auto px-2 py-2 mb-3 mt-3">
+			 		<!-- Uploaded image area-->
+			        <p class="font-italic text-white text-center"><quote>"Here You are"</quote></p>
+			        <div class="image-area mt-4"><img id="imageResult" src="#" alt="" class="img-fluid rounded shadow-sm mx-auto d-block"></div>
+		    	</div>
+			</div>
+		</div>
+	</div>
+	<div id="section2 mt-3" class="container-fluid" style="padding-bottom:35px; background: #ff084d40;">
+		<div class="row px-2 py-2">
+		 	<h1 class="w-100">Quotes</h1>
+		 	<div class="col px-2 py-2">
+		  		<quotes>Try to scroll this section and look at the navigation bar while scrolling! Try to scroll this section and look at the navigation bar while scrolling!</quotes>
+			</div> 
+		</div>
+	</div>
+
+	<div id="section3 mt-3" class="container-fluid" style="padding-bottom:35px; background: #0005ff3d;">
+	  <div class="row px-2 py-2" style="justify-content: center;align-items: center;">
+	  	<h1 class="w-100">My Pic</h1>
+	    <div class="form-group col-sm-3">
+	    	<input type="file" id="pro-image" placeholder="testing" name="pro-image" style="display: block;" class="form-control rounded-pill shadow-sm bg-white" multiple>
+	    	<!-- <label id="upload-label" for="upload" class="font-weight-light text-muted text-center">Choose file</label> -->
+	       <!--  <a href="javascript:void(0)" onclick="$('#pro-image').click()">Upload Image</a> -->
+	    </div>
+	    <div class="preview-images-zone col">
+	     <!-- IMAGE WITH JAVASCRIPT-->  
+	    </div>
+	  </div>
+	</div>
+
+	
+
+
+
+	<script type="text/javascript">
+	/*  ==========================================
+    SHOW UPLOADED IMAGE
+   * ========================================== */
+	function readURL(input) {
+	    if (input.files && input.files[0]) {
+	        var reader = new FileReader();
+
+	        reader.onload = function (e) {
+	            $('#imageResult')
+	                .attr('src', e.target.result);
+	        };
+	        reader.readAsDataURL(input.files[0]);
+	    }
+	}
+
+	$(function () {
+	    $('#upload').on('change', function () {
+	        readURL(input);
+	    });
+	});
+
+	/*  ==========================================
+	    SHOW UPLOADED IMAGE NAME
+	* ========================================== */
+	var input = document.getElementById( 'upload' );
+	var infoArea = document.getElementById( 'upload-label' );
+
+	input.addEventListener( 'change', showFileName );
+	function showFileName( event ) {
+	  var input = event.srcElement;
+	  var fileName = input.files[0].name;
+	  infoArea.textContent = 'File name: ' + fileName;
+	}
+
+	/*=======================
+		Multiple Images
+	*========================*/
+	$(document).ready(function() {
+    document.getElementById('pro-image').addEventListener('change', readImage, false);
+    
+    $( ".preview-images-zone" ).sortable();
+    
+    $(document).on('click', '.image-cancel', function() {
+        let no = $(this).data('no');
+        $(".preview-image.preview-show-"+no).remove();
+    });
+});
+
+
+
+var num = 4;
+function readImage() {
+    if (window.File && window.FileList && window.FileReader) {
+        var files = event.target.files; //FileList object
+        var output = $(".preview-images-zone");
+
+        for (let i = 0; i < files.length; i++) {
+            var file = files[i];
+            if (!file.type.match('image')) continue;
+            
+            var picReader = new FileReader();
+            
+            picReader.addEventListener('load', function (event) {
+                var picFile = event.target;
+                var html =  '<div class="preview-image preview-show-' + num + '">' +
+                            '<div class="image-cancel" data-no="' + num + '">x</div>' +
+                            '<div class="image-zone"><img id="pro-img-' + num + '" src="' + picFile.result + '"></div>' +
+                            '</div>';
+
+                output.append(html);
+                num = num + 1;
+            });
+
+            picReader.readAsDataURL(file);
+        }
+        $("#pro-image").val('');
+    } else {
+        console.log('Browser not support');
+    }
+}
+
+
+	</script>
+</body>
+</html>
