@@ -1,731 +1,607 @@
-<!DOCTYPE html>
-<html lang="en">
+<!--
+  ## Introduction
+
+  The `amp-carousel` component works great for image galleries. The carousel requires the `height` attribute to be specified in advance. This can be tricky if the displayed images and captions vary in size. Here are two approaches to solve this problem.
+--><!-- -->
+<!doctype html>
+<html ⚡>
 <head>
-  <title>Bootstrap Example</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-<!--   <script type="text/javascript" src="upload.js"></script> -->
-  <style type="text/css">
+<meta charset="utf-8">
+  <title>Image Galleries with amp-carousel</title>
+  <script async src="https://cdn.ampproject.org/v0.js"></script>
+  <!-- ## Setup -->
+  <!-- Import the carousel component in the header. -->
+      <script async custom-element="amp-facebook-comments" src="https://cdn.ampproject.org/v0/amp-facebook-comments-0.1.js"></script>
+
+  <script async custom-element="amp-carousel" src="https://cdn.ampproject.org/v0/amp-carousel-0.1.js"></script>
+   <script async custom-element="amp-bind" src="https://cdn.ampproject.org/v0/amp-bind-0.1.js"></script>
+  
+  <script async custom-element="amp-form" src="https://cdn.ampproject.org/v0/amp-form-0.1.js"></script>
+  <script async custom-template="amp-mustache" src="https://cdn.ampproject.org/v0/amp-mustache-0.2.js"></script>
+   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Poppins:ital,wght@0,500;0,700;1,400&display=swap" rel="stylesheet"> 
+  <!--
+    The `amp-lightbox-gallery` component allows us to quickly create a lightbox gallery.
+  -->
+  <script async custom-element="amp-lightbox-gallery" src="https://cdn.ampproject.org/v0/amp-lightbox-gallery-0.1.js"></script>
+  <script async custom-element="amp-selector" src="https://cdn.ampproject.org/v0/amp-selector-0.1.js"></script>
+
+  <link rel="canonical" href="https://amp.dev/documentation/examples/multimedia-animations/image_galleries_with_amp-carousel/index.html">
+  <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+  <style amp-boilerplate>body{-webkit-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-moz-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-ms-animation:-amp-start 8s steps(1,end) 0s 1 normal both;animation:-amp-start 8s steps(1,end) 0s 1 normal both}@-webkit-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-moz-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-ms-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-o-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}</style><noscript><style amp-boilerplate>body{-webkit-animation:none;-moz-animation:none;-ms-animation:none;animation:none}</style></noscript>
+  <style amp-custom>
     body {
-      background: #fafafa;
+/*       font-family: Helvetica; */ 
+      background: #f7f7f7; 
+      background:#deb4f7;
+      font-family: 'Poppins', sans-serif;
     }
-    #upload {
-    opacity: 0;
-}
+    * {
+     box-sizing: border-box;
+    }
+    body > * {
+      margin: 1rem;
+    }
+    h1 {
+      font-size: 20px;
+    }
+    h2 {
+      font-size: 18px;
+    }
+    amp-carousel {
+      margin: 0;
+    }
+    .button {
+      display: inline-block;
+      height: 48px;
+      width: 90px;
+      padding: 4px;
+      margin: 1rem 1rem 1rem 0;
+      background: #005af0;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      font-weight: 700;
+    }
+    .red {
+      background-color: #EF0000;
+    }
+    .green {
+      background-color: #2DB932;
+    }
+    textarea {
+      width: 100%;
+      max-width: 500px;
+      height: 100px;
+    }
+    .amp-form-submit-success #user-input {
+      display: none;
+    }
+    .reply {
+      padding: 1rem;
+      background: #fff;
+      border-radius: 4px;
+    }
+    * {
+          box-sizing: border-box;
+      }
+    :root {
+          --color-primary: #005AF0;
+          --second-color: #d1f7ff; /*#e3ba00; */
+          --space-1: .5rem;  /* 8px */
+          --space-2: 1rem 2rem;  /* 8px */
+          --space-4: 2rem;   /* 32px */
+        }
 
-#upload-label {
-    position: absolute;
-    top: 50%;
-    left: 1rem;
-    transform: translateY(-50%);
-}
-
-.image-area {
-    border: 2px dashed rgba(255, 255, 255, 0.7);
-    padding: 1rem;
-    position: relative;
-}
-
-.image-area::before {
-    content: 'Uploaded image result';
-    color: #fff;
-    font-weight: bold;
+        /* Styles for the selector based tabs */
+        amp-selector[role=tablist].tabs-with-selector {
+            display: flex;
+            
+        }
+        amp-selector[role=tablist].tabs-with-selector [role=tab][selected] {
+            outline: none;
+            /* custom styling, feel free to change */
+            border-bottom: 2px solid #000000; /*var(--color-primary);*/
+            background:#be91d7; /*var(--second-color); */
+            color:#ffffff;
+            border-radius:3px;
+        }
+    
+        amp-selector[role=tablist].tabs-with-selector {
+            display: flex;
+        }
+        amp-selector[role=tablist].tabs-with-selector [role=tab] {
+          /* custom styling, feel free to change */
+          width: 100%;
+          text-align: left;
+          padding: var(--space-2);
+        }
+        amp-selector.tabpanels [role=tabpanel] {
+          display: none;
+          /* custom styling, feel free to change */
+          padding: var(--space-4);
+        }
+        amp-selector.tabpanels [role=tabpanel][selected] {
+          outline: none;
+          display: block;
+        }
+    .outer-wrapper{
+      
+    }
+    body {
+      /*#dfc2f0*/
+      /*background:-webkit-gradient(linear,left top,left bottom,from(#ff0052),to(#8e2b88));
+      background: -o-gradient(linear,left top,left bottom,from(#ff0052),to(#8e2b88));   */ 
+    } 
+    .wrapper {
+      width:800px; 
+      margin:4rem auto;
+      border-radius: .5rem;
+      background: #ffffff;/*#ffe6e6; */
+      box-shadow: 1vh 6vh 5vh rgba(6,7,22,.15);
+      width: 800px;
+/*       background:-webkit-gradient(linear,left top,left bottom,from(#8e2b88),to(#ff0052));
+      background: -o-gradient(linear,left top,left bottom,from(#8e2b88),to(#ff0052)); */
+/*       box-shadow: 0px 1px 5px #0000003b; */
+    }
+    .main-gallery {
+      width:100%;
+      height:100%;
+      display:flex;
+      flex-wrap:wrap;
+      justify-content: space-evenly;
+    }
+    .thumb {
+      width:200px;
+      margin-bottom: var(--space-4);
+      box-shadow: 1vh 6vh 5vh rgba(6,7,22,.15);
+/*       border:1px solid red; */
+      border-radius:.5rem;
+      overflow:hidden;
+      position:relative;
+      
+/*       transform:matrix(1.8,0.3,-0.4,1,0,-1); */
+    }
+    .thumb:nth-child(2) {
+/*       transform: matrix(1.1,0.1,0.2,1,0,32); */
+/*        transform:matrix(1.1,0.1,-0.1,1,0,32) */
+    }
+    .wishes {
+      font-size: 2.5vw;
+      color: #9668b0;
+      font-weight: 700;
+      margin-bottom: 10px;
+      text-align: center;
+      letter-spacing: normal;
+      line-height: normal;
+      max-width: 550px;
+      width:100%;
+      font-family: 'Caveat', cursive;
+    }
+    
+   h1 {
+    align-items: center;
+    font-family: 'Poppins', sans-serif;
+    z-index: 12;
+    display: flex;
+    max-width: 75vw;
+    /* padding: 1rem 2vw 4rem; */
+    font-size: 13vw;
+    pointer-events: none;
+    font-size: 7vw;
     text-transform: uppercase;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 0.8rem;
-    z-index: 1;
-}
-
-.image-area img {
-    z-index: 2;
-    position: relative;
-}
-
-.preview-images-zone {
-    width: 100%;
-    border: 2px dashed rgba(255, 255, 255, 0.7);
-    min-height: 180px;
-    /* display: flex; */
-    padding: 5px 5px 0px 5px;
-    position: relative;
-    overflow:auto;
-}
-.preview-images-zone > .preview-image:first-child {
-    /*height: 200px;
-    width: 200px;*/
-    position: relative;
-    margin-right: 5px;
-}
-.preview-images-zone > .preview-image {
-    /*height: 200px;*/
-    width: 200px;
-   /*  max-width:200px;*/
-    /* min-width:100%;*/
-    position: relative;
-    margin-right: 5px;
-    float: left;
-    margin-bottom: 5px;
-}
-.preview-images-zone > .preview-image > .image-zone {
-    width: 100%;
-    height: 100%;
-}
-.preview-images-zone > .preview-image > .image-zone > img {
-    width: 100%;
-    height: 100%;
-}
-.preview-images-zone > .preview-image > .tools-edit-image {
-    position: absolute;
-    z-index: 100;
-    color: #fff;
-    bottom: 0;
-    width: 100%;
+    color: #a3a3a3; /* Fallback for non-webkit browsers */
+    background: -webkit-linear-gradient(transparent, transparent), url("https://cdn.thingiverse.com/renders/69/49/f3/22/7a/DOGE_thumb_small.jpg") repeat;
+    background: -o-linear-gradient(transparent, transparent);
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
+    color: #8e2b88;
     text-align: center;
-    margin-bottom: 10px;
-    display: none;
+    background: -webkit-gradient(linear, left top, right top, color-stop(20%, #FFF), color-stop(40%, #FF0), color-stop(60%, #FF0), color-stop(80%, #FFF));
+    background: linear-gradient(to right, #8F2A87 20%, #CC1369 40%, #F70255 60%, #5E1A32 80%);
+    background-size: 200% auto;
+    color: #000;
+    background-clip: text;
+    text-fill-color: transparent;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -webkit-animation: shine 1s linear infinite;
+            animation: shine 1s linear infinite;
 }
-.preview-images-zone > .preview-image > .image-cancel {
-    font-size: 18px;
-    position: absolute;
-    top: 0;
-    right: 0;
-    font-weight: bold;
-    margin-right: 10px;
-    cursor: pointer;
-    display: none;
-    z-index: 100;
+@-webkit-keyframes shine {
+  to {
+    background-position: 200% center;
+  }
 }
-.preview-image:hover > .image-zone {
-    cursor: move;
-    opacity: .5;
+@keyframes shine {
+  to {
+    background-position: 200% center;
+  }
 }
-.preview-image:hover > .tools-edit-image,
-.preview-image:hover > .image-cancel {
+    
+    .balloon {
+    position:absolute;
+    bottom: 0;
+    opacity: .9;
+    border-radius: 50%;
+    width: 18px;
+    height: 25px;
+    cursor: crosshair; 
+    z-index: 2;
+}
+
+/* crap attempt at balloon neck */
+.balloon:after {
+    position: relative;
+    background: inherit;
+    top: 18px;
+    left: 8px;
     display: block;
-}
-.ui-sortable-helper {
-    width: 90px !important;
-    height: 90px !important;
-}
-
-.container {
-    padding-top: 50px;
-}
-.wishes {
-  font-size: 24px;
+    content: '';
+    height: .6rem;
+    width: .2rem;
+    border-radius: 100%;
 }
 
-.balloon {
-  width: 100%;
-  margin: 0 auto;
-  padding-top: 0px;
-  position: relative;
-  z-index: 11;
+.balloon:nth-child(1) {
+    background: rgb(255,138,187);
+    bottom: -10%;
+    left: 45%;
+    -webkit-animation: balloon 8s 2s infinite ease-in;
+            animation: balloon 8s 2s infinite ease-in;
 }
-.balloon > div {
-  width: 104px;
-  height: 140px;
-  background: rgba(182, 15, 97, 0.9);
-  border-radius: 0;
-  border-radius: 80% 80% 80% 80%;
-  margin: 0 auto;
-  position: absolute;
-  padding: 10px;
-  box-shadow: inset 17px 7px 10px rgba(182, 15, 97, 0.9);
-  -webkit-transform-origin: bottom center;
+@-webkit-keyframes balloon {
+    0% {  
+        bottom: -10%;
+        -webkit-transform: translateX(0) rotate(8deg); 
+    }
+    20% { -webkit-transform: rotate(4deg); }
+    50% { -webkit-transform: translateX(5px) rotate(-12deg); }
+    75% { -webkit-transform: translateX(-2px) rotate(10deg); }
+    100% { 
+        bottom: 110%;
+        -webkit-transform: rotate(-8deg); 
+    }
 }
-.balloon > div:nth-child(1) {
-  background: rgba(255, 0, 125, 0.9);
-  left: 0;
-  box-shadow: inset 10px 10px 10px rgba(135, 11, 72, 0.9);
-  -webkit-animation: balloon1 6s ease-in-out infinite;
-  -moz-animation: balloon1 6s ease-in-out infinite;
-  -o-animation: balloon1 6s ease-in-out infinite;
-  animation: balloon1 6s ease-in-out infinite;
+@keyframes balloon {
+    0% {  
+        bottom: -10%;
+        -webkit-transform: translateX(0) rotate(8deg); 
+    }
+    20% { -webkit-transform: rotate(4deg); }
+    50% { -webkit-transform: translateX(5px) rotate(-12deg); }
+    75% { -webkit-transform: translateX(-2px) rotate(10deg); }
+    100% { 
+        bottom: 110%;
+        -webkit-transform: rotate(-8deg); 
+    }
 }
-.balloon > div:nth-child(1):before {
-  color: rgba(255, 0, 125, 0.9);
+
+
+.balloon:nth-child(2) {
+    background: rgb(255,171,53);
+    bottom: -10%;
+    left: 20%;
+    -webkit-animation: balloon2 15s 3.2s infinite ease-in;
+            animation: balloon2 15s 3.2s infinite ease-in; 
 }
-.balloon > div:nth-child(2) {
-  background: rgb(255, 137, 17);
-  left: 120px;
-  box-shadow: inset 10px 10px 10px rgba(222, 85, 14, 0.9);
-  -webkit-animation: balloon2 6s ease-in-out infinite;
-  -moz-animation: balloon2 6s ease-in-out infinite;
-  -o-animation: balloon2 6s ease-in-out infinite;
-  animation: balloon2 6s ease-in-out infinite;
-}
-.balloon > div:nth-child(2):before {
-  color: rgb(255, 137, 17);
-}
-.balloon > div:nth-child(3) {
-  background: rgba(45, 181, 167, 0.9);
-  left: 240px;
-  box-shadow: inset 10px 10px 10px rgba(35, 140, 129, 0.9);
-  -webkit-animation: balloon4 6s ease-in-out infinite;
-  -moz-animation: balloon4 6s ease-in-out infinite;
-  -o-animation: balloon4 6s ease-in-out infinite;
-  animation: balloon4 6s ease-in-out infinite;
-}
-.balloon > div:nth-child(3):before {
-  color: rgba(45, 181, 167, 0.9);
-}
-.balloon > div:nth-child(4) {
-  background: rgba(190, 61, 244, 0.9);
-  left: 360px;
-  box-shadow: inset 10px 10px 10px rgba(173, 14, 240, 0.9);
-  -webkit-animation: balloon1 5s ease-in-out infinite;
-  -moz-animation: balloon1 5s ease-in-out infinite;
-  -o-animation: balloon1 5s ease-in-out infinite;
-  animation: balloon1 5s ease-in-out infinite;
-}
-.balloon > div:nth-child(4):before {
-  color: rgba(190, 61, 244, 0.9);
-}
-.balloon > div:nth-child(5) {
-  background: rgba(180, 224, 67, 0.9);
-  left: 480px;
-  box-shadow: inset 10px 10px 10px rgba(158, 206, 34, 0.9);
-  -webkit-animation: balloon3 5s ease-in-out infinite;
-  -moz-animation: balloon3 5s ease-in-out infinite;
-  -o-animation: balloon3 5s ease-in-out infinite;
-  animation: balloon3 5s ease-in-out infinite;
-}
-.balloon > div:nth-child(5):before {
-  color: rgba(180, 224, 67, 0.9);
-}
-.balloon > div:nth-child(6) {
-  background: #FFEB3B;
-  left: 600px;
-  box-shadow: inset 10px 10px 10px rgba(234, 177, 15, 0.9);
-  -webkit-animation: balloon2 3s ease-in-out infinite;
-  -moz-animation: balloon2 3s ease-in-out infinite;
-  -o-animation: balloon2 3s ease-in-out infinite;
-  animation: balloon2 3s ease-in-out infinite;
-}
-.balloon > div:nth-child(6):before {
-  color: #FFEB3B;
-}
-.balloon > div:before {
-  color: rgba(182, 15, 97, 0.9);
-  position: absolute;
-  bottom: -11px;
-  left: 52px;
-  content: "▲";
-  font-size: 1em;
-}
-span {
-  font-size: 4.8em;
-  color: white;
-  position: relative;
-  top: 0px;
-  left: 50%;
-  margin-left: -27px;
-}
-/*BALLOON 1 4*/
-@-webkit-keyframes balloon1 {
-  0%,
-  100% {
-    -webkit-transform: translateY(0) rotate(-6deg);
-  }
-  50% {
-    -webkit-transform: translateY(-20px) rotate(8deg);
-  }
-}
-@-moz-keyframes balloon1 {
-  0%,
-  100% {
-    -moz-transform: translateY(0) rotate(-6deg);
-  }
-  50% {
-    -moz-transform: translateY(-20px) rotate(8deg);
-  }
-}
-@-o-keyframes balloon1 {
-  0%,
-  100% {
-    -o-transform: translateY(0) rotate(-6deg);
-  }
-  50% {
-    -o-transform: translateY(-20px) rotate(8deg);
-  }
-}
-@keyframes balloon1 {
-  0%,
-  100% {
-    transform: translateY(0) rotate(-6deg);
-  }
-  50% {
-    transform: translateY(-20px) rotate(8deg);
-  }
-}
-/* BAllOON 2 5*/
 @-webkit-keyframes balloon2 {
-  0%,
-  100% {
-    -webkit-transform: translateY(0) rotate(6eg);
-  }
-  50% {
-    -webkit-transform: translateY(-30px) rotate(-8deg);
-  }
-}
-@-moz-keyframes balloon2 {
-  0%,
-  100% {
-    -moz-transform: translateY(0) rotate(6deg);
-  }
-  50% {
-    -moz-transform: translateY(-30px) rotate(-8deg);
-  }
-}
-@-o-keyframes balloon2 {
-  0%,
-  100% {
-    -o-transform: translateY(0) rotate(6deg);
-  }
-  50% {
-    -o-transform: translateY(-30px) rotate(-8deg);
-  }
+    0% {  bottom: -10%;
+        -webkit-transform: translateX(0) rotate(0deg); 
+    }
+    20% { -webkit-transform: rotate(-8deg); }
+    50% { -webkit-transform: translateX(-10px) rotate(10deg); }
+    75% { -webkit-transform: translateX(5px) rotate(-8deg); }
+    100% { 
+        bottom: 110%;
+        -webkit-transform: translateX(0) rotate(8deg); 
+    }
 }
 @keyframes balloon2 {
-  0%,
-  100% {
-    transform: translateY(0) rotate(6deg);
-  }
-  50% {
-    transform: translateY(-30px) rotate(-8deg);
-  }
-}
-/* BAllOON 0*/
-@-webkit-keyframes balloon3 {
-  0%,
-  100% {
-    -webkit-transform: translate(0, -10px) rotate(6eg);
-  }
-  50% {
-    -webkit-transform: translate(-20px, 30px) rotate(-8deg);
-  }
-}
-@-moz-keyframes balloon3 {
-  0%,
-  100% {
-    -moz-transform: translate(0, -10px) rotate(6eg);
-  }
-  50% {
-    -moz-transform: translate(-20px, 30px) rotate(-8deg);
-  }
-}
-@-o-keyframes balloon3 {
-  0%,
-  100% {
-    -o-transform: translate(0, -10px) rotate(6eg);
-  }
-  50% {
-    -o-transform: translate(-20px, 30px) rotate(-8deg);
-  }
-}
-@keyframes balloon3 {
-  0%,
-  100% {
-    transform: translate(0, -10px) rotate(6eg);
-  }
-  50% {
-    transform: translate(-20px, 30px) rotate(-8deg);
-  }
-}
-/* BAllOON 3*/
-@-webkit-keyframes balloon4 {
-  0%,
-  100% {
-    -webkit-transform: translate(10px, -10px) rotate(-8eg);
-  }
-  50% {
-    -webkit-transform: translate(-15px, 20px) rotate(10deg);
-  }
-}
-@-moz-keyframes balloon4 {
-  0%,
-  100% {
-    -moz-transform: translate(10px, -10px) rotate(-8eg);
-  }
-  50% {
-    -moz-transform: translate(-15px, 10px) rotate(10deg);
-  }
-}
-@-o-keyframes balloon4 {
-  0%,
-  100% {
-    -o-transform: translate(10px, -10px) rotate(-8eg);
-  }
-  50% {
-    -o-transform: translate(-15px, 10px) rotate(10deg);
-  }
-}
-@keyframes balloon4 {
-  0%,
-  100% {
-    transform: translate(10px, -10px) rotate(-8eg);
-  }
-  50% {
-    transform: translate(-15px, 10px) rotate(10deg);
-  }
-}
-
-/* Buddy Name */
-.buddy{
-  font-size: 52px;
-  text-align: center;
-   animation: Color 4s linear infinite;
-  -webkit-animation: Color 4s ease-in-out infinite;
-  text-shadow: 1px 1px #F0F0F0;
-  background: #bf97fc69;
-    border-top-left-radius: 12px;
-    margin: 0 auto;
-    border: 2px solid;
-    padding: 0 0 0 0;
-    border-top-right-radius: 12px;
-}
-
-@keyframes Color{
-  0%{
-    color:#A0D468;
-  }
-  
-  20%{
-    color:#4FC1E9;
-  }
-  
-  40%{
-    color:#FFCE54;
-  }
-  
-  60%{
-    color:#FC6E51;
-  }
-  
-  80%{
-    color:#ED5565;
-  }
-  
-  100%{
-    color:#AC92EC;
-  }
-}
-
-@-moz-keyframes Color{
-  0%{
-    color:#A0D468;
-  }
-  
-  20%{
-    color:#4FC1E9;
-  }
-  
-  40%{
-    color:#FFCE54;
-  }
-  
-  60%{
-    color:#FC6E51;
-  }
-  
-  80%{
-    color:#ED5565;
-  }
-  
-  100%{
-    color:#AC92EC;
-  }
-}
-
-@-webkit-keyframes Color{
-  0%{
-    color:#A0D468;
-  }
-  
-  20%{
-    color:#4FC1E9;
-  }
-  
-  40%{
-    color:#FFCE54;
-  }
-  
-  60%{
-    color:#FC6E51;
-  }
-  
-  80%{
-    color:#ED5565;
-  }
-  
-  100%{
-    color:#AC92EC;
-  }
-}
-
-@media only screen and (max-width: 600px) {
-  .mobile {
-    display: none;
-  }
- 
-}
-
-  </style>
-</head>
-<body data-spy="scroll" data-target=".navbar" data-offset="50">
- <!--  <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-app.js"></script>
-
-<script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-analytics.js"></script> -->
-<!-- <script>
-  const firebaseConfig = {
-  apiKey: "AIzaSyB5-lrQzp0JgPF7zVQsCz-Py6nBPp98Gz8",
-  authDomain: "ake-testing.firebaseapp.com",
-  databaseURL: "https://ake-testing.firebaseio.com",
-  projectId: "ake-testing",
-  storageBucket: "ake-testing.appspot.com",
-  messagingSenderId: "588230132155",
-  appId: "1:588230132155:web:cd89e59239ac2c552b049e",
-  measurementId: "G-68YYFEBTBH"
-};
-</script> -->
-<!-- The core Firebase JS SDK is always required and must be listed first -->
-<script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-app.js"></script>
-
-<!-- TODO: Add SDKs for Firebase products that you want to use
-     https://firebase.google.com/docs/web/setup#available-libraries -->
-<script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-analytics.js"></script>
-
-<script>
-  // Your web app's Firebase configuration
-  var firebaseConfig = {
-    apiKey: "AIzaSyB5-lrQzp0JgPF7zVQsCz-Py6nBPp98Gz8",
-    authDomain: "ake-testing.firebaseapp.com",
-    databaseURL: "https://ake-testing.firebaseio.com",
-    projectId: "ake-testing",
-    storageBucket: "ake-testing.appspot.com",
-    messagingSenderId: "588230132155",
-    appId: "1:588230132155:web:cd89e59239ac2c552b049e",
-    measurementId: "G-68YYFEBTBH"
-  };
-  // Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
-  firebase.analytics();
-</script>
-
-  <!-- <nav class="navbar navbar-expand-md fixed-top">
-   <a class="navbar-brand" href="#">
-      <img src="https://lh3.googleusercontent.com/-9aP5J60wKFo/AAAAAAAAAAI/AAAAAAAAAAc/9v9KJeCOalsJLxNKiI6iqWlnvckT0EztQCLcDEAE/s64-c-k-no/photo.jpg" alt="logo" style="width:40px;">
-   </a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="collapsibleNavbar">
-    <ul class="navbar-nav">
-      <li class="nav-item">
-        <a class="nav-link" href="#section1">Name</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#section1">Wishes</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#section1">Grid</a>
-      </li>    
-    </ul>
-  </div>  
-</nav> -->
-
-  <!-- nav start -->
-  <nav class="navbar navbar-expand-sm fixed-top " style="background: #ffffff;">
-    <!-- Brand/logo -->
-    <a class="navbar-brand" href="#">
-      <img src="https://lh3.googleusercontent.com/-9aP5J60wKFo/AAAAAAAAAAI/AAAAAAAAAAc/9v9KJeCOalsJLxNKiI6iqWlnvckT0EztQCLcDEAE/s64-c-k-no/photo.jpg" alt="logo" style="width:40px;">
-    </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    
-    <!-- Links -->
-     <div class="collapse navbar-collapse" id="collapsibleNavbar">
-    <ul class="navbar-nav">
-      <li class="nav-item">
-        <a class="nav-link" href="#section1">Name</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#section2">Quotes</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#section3">Grid</a>
-      </li>
-    </ul>
-  </div>
-  </nav>
-  <!-- nav end -->
-  <!-- <div class="container-fluid" style=" ">
-    <h1>My First Bootstrap Page</h1>
-    <p>This part is inside a .container class.</p> 
-    <p>The .container class provides a responsive fixed width container.</p>           
-  </div> -->
-  <div id="section1" class="container-fluid" style="padding-top:70px; padding-bottom: 35px;">
-    <div class="row" style="justify-content: center;align-items: center;/*! height: 100%; */background: #bf97fc;">
-      <div class="col-sm-6" style="background: #f8f9fa; ">
-        <div>
-            <h1 class="text-center px-2 py-2 mb-3 mt-3">Happy Birthday </h1>
-                <!-- Upload image input-->
-                 <div class="col-lg-8 mx-auto">
-                  <!-- Upload image input-->
-                  <div class="input-group mb-3 px-2 py-2 rounded-pill bg-white shadow-sm">
-                      <input id="upload" type="file" onchange="readURL(this);" class="form-control border-0">
-                      <label id="upload-label" for="upload" class="font-weight-light text-muted">Choose file</label>
-                      <div class="input-group-append">
-                          <label for="upload" class="btn btn-light m-0 rounded-pill px-4"><small class="text-uppercase font-weight-bold text-muted">Upload</small></label>
-                      </div>
-                  </div>
-                   <div class="balloon mobile">
-            <div><span>☺</span></div>
-            <div><span>B</span></div>
-            <div><span>D</span></div>
-            <div><span>A</span></div>
-            <div><span>Y</span></div>
-            <div><span>!</span></div>
-          </div>
-            </div>
-          </div>
-      </div>
-      <div class="col-sm-6" style="background: #0005ff3d;">
-        <div class="col-lg-12 mx-auto px-2 py-2 mb-3 mt-3">
-          <!-- Uploaded image area-->
-              <p class="buddy"> Aeakanshi </p>
-              <div class="image-area mt-4"><img id="imageResult" src="https://i.pinimg.com/originals/40/50/da/4050da39db63c7fc0eee7ab6894f4c68.gif" alt="" class="img-fluid rounded shadow-sm mx-auto d-block"></div>
-          </div>
-      </div>
-    </div>
-  </div>
-
-  <div id="section2 mt-3" class="container-fluid" style="padding-bottom:35px;">
-    <div class="row px-2 py-2 text-center">
-      <h1 class="w-100">Wishes</h1>
-      <div class="col-md-6 px-2 py-2 text-center mx-auto wishes">
-          <i>“A wish for you on your birthday, whatever you ask may you receive, whatever you seek may you find, whatever you wish may it be fulfilled on your birthday and always. Happy birthday!”</i>
-      </div> 
-    </div>
-  </div>
-
-  <div id="section3 mt-3" class="container-fluid" style="padding-bottom:35px; background: #0005ff3d;">
-    <div class="row px-2 py-2" style="justify-content: center;align-items: center;">
-      <h1 class="w-100">My Pic</h1>
-      <div class="form-group col-sm-3">
-        <input type="file" id="pro-image"  name="pro-image" style="display: block;" class="form-control rounded-pill shadow-sm bg-white" multiple>
-        <!-- <label id="upload-label" for="upload" class="font-weight-light text-muted text-center">Choose file</label> -->
-         <!--  <a href="javascript:void(0)" onclick="$('#pro-image').click()">Upload Image</a> -->
-      </div>
-      <div class="preview-images-zone col">
-       <!-- IMAGE WITH JAVASCRIPT-->  
-      </div>
-    </div>
-  </div>
-
-  
-
-
-
-  <script type="text/javascript">
-  /*  ==========================================
-    SHOW UPLOADED IMAGE
-   * ========================================== */
-  function readURL(input) {
-      if (input.files && input.files[0]) {
-          var reader = new FileReader();
-
-          reader.onload = function (e) {
-              $('#imageResult')
-                  .attr('src', e.target.result);
-          };
-          reader.readAsDataURL(input.files[0]);
-      }
-  }
-
-  $(function () {
-      $('#upload').on('change', function () {
-          readURL(input);
-      });
-  });
-
-  /*  ==========================================
-      SHOW UPLOADED IMAGE NAME
-  * ========================================== */
-  var input = document.getElementById( 'upload' );
-  var infoArea = document.getElementById( 'upload-label' );
-
-  input.addEventListener( 'change', showFileName );
-  function showFileName( event ) {
-    var input = event.srcElement;
-    var fileName = input.files[0].name;
-    infoArea.textContent = 'File name: ' + fileName;
-  }
-
-  /*=======================
-    Multiple Images
-  *========================*/
-  $(document).ready(function() {
-    document.getElementById('pro-image').addEventListener('change', readImage, false);
-    
-    $( ".preview-images-zone" ).sortable();
-    
-    $(document).on('click', '.image-cancel', function() {
-        let no = $(this).data('no');
-        $(".preview-image.preview-show-"+no).remove();
-    });
-});
-
-
-
-
-
-
-var num = 4;
-function readImage() {
-    if (window.File && window.FileList && window.FileReader) {
-        var files = event.target.files; //FileList object
-        var output = $(".preview-images-zone");
-
-        for (let i = 0; i < files.length; i++) {
-            var file = files[i];
-            if (!file.type.match('image')) continue;
-            
-            var picReader = new FileReader();
-            
-            picReader.addEventListener('load', function (event) {
-                var picFile = event.target;
-                var html =  '<div class="preview-image preview-show-' + num + '">' +
-                            '<div class="image-cancel" data-no="' + num + '">x</div>' +
-                            '<div class="image-zone"><img id="pro-img-' + num + '" src="' + picFile.result + '"></div>' +
-                            '</div>';
-
-                output.append(html);
-                num = num + 1;
-            });
-
-            picReader.readAsDataURL(file);
-        }
-        $("#pro-image").val('');
-    } else {
-        console.log('Browser not support');
+    0% {  bottom: -10%;
+        -webkit-transform: translateX(0) rotate(0deg); 
+    }
+    20% { -webkit-transform: rotate(-8deg); }
+    50% { -webkit-transform: translateX(-10px) rotate(10deg); }
+    75% { -webkit-transform: translateX(5px) rotate(-8deg); }
+    100% { 
+        bottom: 110%;
+        -webkit-transform: translateX(0) rotate(8deg); 
     }
 }
 
 
-  </script>
+.balloon:nth-child(3){
+    background: rgb(39,20,255);
+    bottom: -10%;
+    left: 75%;
+    -webkit-animation: balloon3 9s 10s infinite ease-in;
+            animation: balloon3 9s 10s infinite ease-in;
+}
+@-webkit-keyframes balloon3 {
+    0% {  bottom: -10%;
+        -webkit-transform: translateX(0) rotate(0deg); 
+    }
+    20% { -webkit-transform: translateX(-4px) rotate(4deg); }
+    50% { -webkit-transform: translateX(8px) rotate(-8deg); }
+    75% { -webkit-transform: translateX(-10px) rotate(10deg); }
+    100% { 
+        bottom: 110%;
+        -webkit-transform: translateX(0) rotate(0deg); 
+    }
+}
+@keyframes balloon3 {
+    0% {  bottom: -10%;
+        -webkit-transform: translateX(0) rotate(0deg); 
+    }
+    20% { -webkit-transform: translateX(-4px) rotate(4deg); }
+    50% { -webkit-transform: translateX(8px) rotate(-8deg); }
+    75% { -webkit-transform: translateX(-10px) rotate(10deg); }
+    100% { 
+        bottom: 110%;
+        -webkit-transform: translateX(0) rotate(0deg); 
+    }
+}
 
 
+.balloon:nth-child(4) {
+    background: rgb(235,255,20);
+    bottom: -10%;
+    left: 55%;
+    -webkit-animation: balloon4 12s 6s infinite ease-in;
+            animation: balloon4 12s 6s infinite ease-in;
+}
+@-webkit-keyframes balloon4 {
+    0% {  bottom: -10%;
+        -webkit-transform: translateX(0) rotate(-4deg); 
+    }
+    40% { -webkit-transform: translateX(-8px) rotate(10deg); }
+    85% { -webkit-transform: translateX(10px) rotate(-8deg); }
+    100% { 
+        bottom: 110%;
+        -webkit-transform: translateX(0) rotate(0); 
+    }
+}
+@keyframes balloon4 {
+    0% {  bottom: -10%;
+        -webkit-transform: translateX(0) rotate(-4deg); 
+    }
+    40% { -webkit-transform: translateX(-8px) rotate(10deg); }
+    85% { -webkit-transform: translateX(10px) rotate(-8deg); }
+    100% { 
+        bottom: 110%;
+        -webkit-transform: translateX(0) rotate(0); 
+    }
+}
 
+.balloon:nth-child(5) {
+    bacground: rgb(189,96,255);
+    bottom: -10%;
+    left: 65%;
+    -webkit-animation: balloon4 10s 10s infinite ease-in;
+            animation: balloon4 10s 10s infinite ease-in;
+}
+
+.balloon:nth-child(6) {
+    background: rgb(20,189,34);
+    bottom: -10%;
+    left: 85%;
+    -webkit-animation: balloon2 12s 4s infinite ease-in;
+            animation: balloon2 12s 4s infinite ease-in;
+}
+
+.balloon:nth-child(7) {
+    background: rgb(20,235,255);
+    bottom: -10%;
+    left: 10%;
+    -webkit-animation: balloon3 9s 7s infinite ease-in;
+            animation: balloon3 9s 7s infinite ease-in;
+}
+
+    
+    
+    /*.thumb:hover .bunney {
+    transform: rotate(-33deg) translate(4px, -7px);
+}
+    .bunney {
+    position: absolute;
+    width: 50%;
+    height: 200px;
+    left: -21%;
+    top: -120px;
+    background: url(https://aeakanshi.github.io/Pragyan-Smart-Boy/html/img/gif/20.png) no-repeat;
+        background-size: auto;
+    background-size: 95px;
+    z-index: -1;
+    transform: rotate(-33deg);
+    transition: all 0.5s ease-in-out;
+    transform: rotate(-33deg) translate(4px, 100px);
+}*/
+
+    
+    @media only screen and (max-width: 600px) {
+/*   .mobile {
+    display: none;
+  } */
+      .wrapper{
+        width:100%;
+      }
+      
+      .wishes {
+      font-size: 7vw;
+      }
+      
+      .thumb {
+        width:100%;
+      }
+      
+       amp-selector[role=tablist].tabs-with-selector [role=tab] {
+          /* custom styling, feel free to change */
+          width: 100%;
+          text-align: center;
+          padding: 1rem 1rem;
+        }
+ 
+}
+  </style>
+</head>
+<body>
+  <div class="outer-wrapper">
+     <div class=" ">
+        <div class="balloon yellow"></div>
+        <div class="balloon blue"></div>
+        <div class="balloon purple"></div>
+        <div class="balloon red"></div>
+        <div class="balloon cyan"></div>
+        <div class="balloon pink"></div>
+        <div class="balloon orange"></div>
+    </div>
+    <div class="wrapper">
+      <div>
+      <amp-selector class="tabs-with-selector" role="tablist" on="select:myTabPanels.toggle(index=event.targetOption, value=true)" keyboard-select-mode="focus">
+        <div id="sample3-tab1" role="tab" aria-controls="sample3-tabpanel1" option="0" selected>Happy B'day</div>
+        <div id="sample3-tab2" role="tab" aria-controls="sample3-tabpanel2" option="1">MOF</div>
+        <div id="sample3-tab3" role="tab" aria-controls="sample3-tabpanel3" option="2">Recognition</div>
+      </amp-selector>
+
+      <amp-selector id="myTabPanels" class="tabpanels">
+        <div id="sample3-tabpanel1" role="tabpanel" aria-labelledby="sample3-tab1" option selected>
+          <div class="main-gallery">
+            <h1 class="gallery-title">Happy Birthday</h1>
+            <div class="thumb"> 
+              <!--<div class="bunney"></div>-->
+              <amp-img src="https://aeakanshi.github.io/Birthday_animation/a1.jpg" width="100" height="100" layout="responsive" alt="a sample image"></amp-img>
+            </div>
+            <div class="thumb"> 
+              <amp-img src="https://i.pinimg.com/originals/40/50/da/4050da39db63c7fc0eee7ab6894f4c68.gif" width="100" height="100" layout="responsive" alt="a sample image"></amp-img>
+            </div>
+            <div class="thumb"> 
+              <amp-img src="https://aeakanshi.github.io/Birthday_animation/a2.jpg" width="100" height="100" layout="responsive" alt="a sample image"></amp-img>
+            </div>
+            <div class="thumb"> 
+              <amp-img src="https://aeakanshi.github.io/Birthday_animation/a3.jpg" width="100" height="100" layout="responsive" alt="a sample image"></amp-img>
+            </div>
+            <div class="thumb"> 
+              <amp-img src="https://aeakanshi.github.io/Birthday_animation/a4.jpg" width="100" height="100" layout="responsive" alt="a sample image"></amp-img>
+            </div>
+            <p class="wishes">
+               "Your special day will bring you lots of happiness, love, and fun. You deserve them a lot. Enjoy!"
+            </p>
+          </div>
+        </div>
+        <div id="sample3-tabpanel2" role="tabpanel" aria-labelledby="sample3-tab2" option>
+           <amp-carousel id="carousel-with-lightbox" width="400" height="300" layout="responsive" type="slides" lightbox>
+            <amp-img src="https://unsplash.it/400/300?image=10" width="400" height="300" layout="responsive" alt="a sample image"></amp-img>
+            <amp-img src="https://unsplash.it/400/300?image=11" width="400" height="300" layout="responsive" alt="a sample image"></amp-img>
+            <amp-img src="https://unsplash.it/400/300?image=12" width="400" height="300" layout="responsive" alt="a sample image"></amp-img>
+            <amp-img src="https://unsplash.it/400/300?image=13" width="400" height="300" layout="responsive" alt="a sample image"></amp-img>
+          </amp-carousel> 
+        </div>
+        <div id="sample3-tabpanel3" role="tabpanel" aria-labelledby="sample3-tab3" option>
+          <div class="main-gallery">
+            <h1 class="gallery-title">Happy Birthday</h1>
+            <div class="thumb"> 
+              <!--<div class="bunney"></div>-->
+              <amp-img src="https://scontent.fdel1-2.fna.fbcdn.net/v/t1.0-9/31755303_10214635773599371_6009101134814248960_o.jpg?_nc_cat=107&_nc_sid=7aed08&_nc_ohc=bgvV6py8MtwAX-fjUsb&_nc_ht=scontent.fdel1-2.fna&oh=91254a31f6c3f91c6065b20ae58b1fb9&oe=5ED609FC" width="100" height="100" layout="responsive" alt="a sample image"></amp-img>
+            </div>
+            <div class="thumb"> 
+              <amp-img src="https://scontent.fdel1-3.fna.fbcdn.net/v/t1.0-9/18221686_1218827034881232_2899278183869691712_n.jpg?_nc_cat=111&_nc_sid=85a577&_nc_ohc=2RrgtJwGuKsAX-XQl1N&_nc_ht=scontent.fdel1-3.fna&oh=6072c4df2252f25e21020625541a850d&oe=5ED6D27E" width="100" height="100" layout="responsive" alt="a sample image"></amp-img>
+            </div>
+            <div class="thumb"> 
+              <amp-img src="https://aeakanshi.github.io/Birthday_animation/a2.jpg" width="100" height="100" layout="responsive" alt="a sample image"></amp-img>
+            </div>
+            <div class="thumb"> 
+              <amp-img src="https://aeakanshi.github.io/Birthday_animation/a3.jpg" width="100" height="100" layout="responsive" alt="a sample image"></amp-img>
+            </div>
+            <div class="thumb"> 
+              <amp-img src="https://aeakanshi.github.io/Birthday_animation/a4.jpg" width="100" height="100" layout="responsive" alt="a sample image"></amp-img>
+            </div>
+            <p class="wishes">
+               "Your special day will bring you lots of happiness, love, and fun. You deserve them a lot. Enjoy!"
+            </p>
+          </div>
+        </div>
+      </amp-selector>
+    </div>
+  </div>
+  </div>
+    <!-- Let users reply to questions or comment directly from 
+    within their email client 🤯.  -->
+<!--   <h2>What do you think?</h2>
+  <form id="rating" method="post"
+    action-xhr="https://amp.dev/documentation/examples/api/echo">
+    <div id="user-input">
+      <p>Leave a comment</p>
+      <textarea  name="comment" autocomplete="off"></textarea> tap:target1.actionA,target2.actionB
+      <div id="form-inputs">
+        <button on="tap:AMP.setState({ rating: '👍' }), rating.submit" 
+                type="button" class="button green">Let's go!</button>
+        <button on="tap:AMP.setState({ rating: '👎' }), rating.submit" 
+                type="button" class="button red">No Way!</button>
+        <input type="hidden" name="rating" [value]="rating" value="">
+      </div>
+    </div>
+    <div submit-success>
+      <template type="amp-mustache">
+        <p>You replied:</p>
+        <p class="reply">
+          {{rating}}
+          {{comment}}
+        </p>
+      </template>
+    </div>
+  </form>
+    
+    
+    
+    <form id="comment-form">
+        <input type="text" id="comment-input" class="comment-input" placeholder="Thoughts">
+        <input type="submit" value="Post" class="comment-btn">
+      </form> -->
+
+<!--   <div style="width:800px; margin:4rem auto;">
+    <amp-carousel id="carousel-with-lightbox" width="400" height="300" layout="responsive" type="slides" lightbox>
+      <amp-img src="https://unsplash.it/400/300?image=10" width="400" height="300" layout="responsive" alt="a sample image"></amp-img>
+      <amp-img src="https://unsplash.it/400/300?image=11" width="400" height="300" layout="responsive" alt="a sample image"></amp-img>
+      <amp-img src="https://unsplash.it/400/300?image=12" width="400" height="300" layout="responsive" alt="a sample image"></amp-img>
+      <amp-img src="https://unsplash.it/400/300?image=13" width="400" height="300" layout="responsive" alt="a sample image"></amp-img>
+    </amp-carousel>
+  </div> -->
+
+  <!--
+    ## Metadata
+
+    The Top Stories carousel requires schema.org markup for one of the following types: Article, NewsArticle, BlogPosting, or VideoObject. If your Image Gallery is also a NewsArticle, you may want to mark it up as such:
+
+    ```html
+    <script type="application/ld+json">
+    [
+      {
+        "@context": "http://schema.org",
+        "@type": "NewsArticle",
+        ...
+      },
+      {
+        "@context": "http://schema.org",
+        "@type": "ImageGallery",
+        "associatedMedia": [
+          {
+            "@context": "http://schema.org",
+            "@type": "ImageObject",
+            "contentUrl": "https://unsplash.it/60/40?image=1",
+            "caption": "A cute pup"
+          },
+          {,
+            "@context": "http://schema.org",
+            "@type": "ImageObject",
+            "contentUrl": "https://unsplash.it/60/40?image=2",
+            "caption": "A doubly cute pup"
+          },
+        ],
+      }
+    ]
+    </script>
+    ```
+    -->
 </body>
-</html>
+</html></html>
