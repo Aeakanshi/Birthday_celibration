@@ -159,12 +159,39 @@
       border-radius:.5rem;
       overflow:hidden;
       position:relative;
+      cursor:pointer;
       
 /*       transform:matrix(1.8,0.3,-0.4,1,0,-1); */
     }
     
     .thumb.rec {
       border-radius:50%;
+    }
+    .band, .band label {
+      width: 100%;
+      height: 0;
+      background: #deb4f7;
+      top: 0;
+      position: absolute;
+      opacity: 0.9;
+      z-index: 123;
+      visibility: hidden;
+      transition: All 1s ease;
+    -webkit-transition: All 1s ease;
+    -moz-transition: All 1s ease;
+    -o-transition: All 1s ease;
+    }
+    .band label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    
+    
+    .thumb:hover .band , .thumb:hover .band label  {
+      height: 100%;
+      visibility: visible;
     }
     .thumb:nth-child(2) {
 /*       transform: matrix(1.1,0.1,0.2,1,0,32); */
@@ -454,15 +481,7 @@
 </head>
 <body>
   <div class="outer-wrapper">
-      <div class=" ">
-        <div class="balloon yellow"></div>
-        <div class="balloon blue"></div>
-        <div class="balloon purple"></div>
-        <div class="balloon red"></div>
-        <div class="balloon cyan"></div>
-        <div class="balloon pink"></div>
-        <div class="balloon orange"></div>
-    </div>
+     
     <div class="wrapper">
       <div>
       <amp-selector class="tabs-with-selector" role="tablist" on="select:myTabPanels.toggle(index=event.targetOption, value=true)" keyboard-select-mode="focus">
@@ -473,23 +492,42 @@
 
       <amp-selector id="myTabPanels" class="tabpanels">
         <div id="sample3-tabpanel1" role="tabpanel" aria-labelledby="sample3-tab1" option selected>
+          <div class=" ">
+        <div class="balloon yellow"></div>
+        <div class="balloon blue"></div>
+        <div class="balloon purple"></div>
+        <div class="balloon red"></div>
+        <div class="balloon cyan"></div>
+        <div class="balloon pink"></div>
+        <div class="balloon orange"></div>
+    </div>
           <div class="main-gallery">
             <h1 class="gallery-title">Happy Birthday</h1>
             <div class="thumb"> 
               <!--<div class="bunney"></div>-->
               <amp-img src="https://aeakanshi.github.io/Birthday_animation/a1.jpg" width="100" height="100" layout="responsive" alt="a sample image"></amp-img>
+              <div class="band">
+               <label>“🥳 Sending you smiles for every.......</label>
+              </div>
             </div>
             <div class="thumb"> 
               <amp-img src="https://i.pinimg.com/originals/40/50/da/4050da39db63c7fc0eee7ab6894f4c68.gif" width="100" height="100" layout="responsive" alt="a sample image"></amp-img>
             </div>
             <div class="thumb"> 
               <amp-img src="https://aeakanshi.github.io/Birthday_animation/a2.jpg" width="100" height="100" layout="responsive" alt="a sample image"></amp-img>
+              <div class="band">
+               <label>moment of your special day 😃..</label>
+              </div>
             </div>
             <div class="thumb"> 
               <amp-img src="https://aeakanshi.github.io/Birthday_animation/a3.jpg" width="100" height="100" layout="responsive" alt="a sample image"></amp-img>
+              <div class="band">
+               <label>🤩 Have a wonderful time and a...</label>
+              </div>
             </div>
             <div class="thumb"> 
               <amp-img src="https://aeakanshi.github.io/Birthday_animation/a4.jpg" width="100" height="100" layout="responsive" alt="a sample image"></amp-img>
+              <label>very happy birthday! 👸</label>
             </div>
             <p class="wishes">
                "Your special day will bring you lots of happiness, love, and fun. You deserve them a lot. Enjoy!"
@@ -617,4 +655,4 @@
     ```
     -->
 </body>
-</html></html>
+</html>
