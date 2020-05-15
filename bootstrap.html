@@ -7,7 +7,7 @@
 <html ⚡>
 <head>
 <meta charset="utf-8">
-  <title>Image Galleries with amp-carousel</title>
+  <title>Image Galleries with AMP</title>
   <script async src="https://cdn.ampproject.org/v0.js"></script>
   <!-- ## Setup -->
   <!-- Import the carousel component in the header. -->
@@ -161,6 +161,10 @@
       position:relative;
       
 /*       transform:matrix(1.8,0.3,-0.4,1,0,-1); */
+    }
+    
+    .thumb.rec {
+      border-radius:50%;
     }
     .thumb:nth-child(2) {
 /*       transform: matrix(1.1,0.1,0.2,1,0,32); */
@@ -432,7 +436,10 @@
       }
       
       .thumb {
-        width:100%;
+        width:70%;
+      }
+      .thumb.rec {
+        width:70%;
       }
       
        amp-selector[role=tablist].tabs-with-selector [role=tab] {
@@ -447,7 +454,18 @@
 </head>
 <body>
   <div class="outer-wrapper">
-     <div class=" ">
+     
+    <div class="wrapper">
+      <div>
+      <amp-selector class="tabs-with-selector" role="tablist" on="select:myTabPanels.toggle(index=event.targetOption, value=true)" keyboard-select-mode="focus">
+        <div id="sample3-tab1" role="tab" aria-controls="sample3-tabpanel1" option="0" selected>Happy B'day</div>
+        <div id="sample3-tab2" role="tab" aria-controls="sample3-tabpanel2" option="1">Videos</div>
+        <div id="sample3-tab3" role="tab" aria-controls="sample3-tabpanel3" option="2">Winners</div>
+      </amp-selector>
+
+      <amp-selector id="myTabPanels" class="tabpanels">
+        <div id="sample3-tabpanel1" role="tabpanel" aria-labelledby="sample3-tab1" option selected>
+          <div class=" ">
         <div class="balloon yellow"></div>
         <div class="balloon blue"></div>
         <div class="balloon purple"></div>
@@ -456,16 +474,6 @@
         <div class="balloon pink"></div>
         <div class="balloon orange"></div>
     </div>
-    <div class="wrapper">
-      <div>
-      <amp-selector class="tabs-with-selector" role="tablist" on="select:myTabPanels.toggle(index=event.targetOption, value=true)" keyboard-select-mode="focus">
-        <div id="sample3-tab1" role="tab" aria-controls="sample3-tabpanel1" option="0" selected>Happy B'day</div>
-        <div id="sample3-tab2" role="tab" aria-controls="sample3-tabpanel2" option="1">MOF</div>
-        <div id="sample3-tab3" role="tab" aria-controls="sample3-tabpanel3" option="2">Recognition</div>
-      </amp-selector>
-
-      <amp-selector id="myTabPanels" class="tabpanels">
-        <div id="sample3-tabpanel1" role="tabpanel" aria-labelledby="sample3-tab1" option selected>
           <div class="main-gallery">
             <h1 class="gallery-title">Happy Birthday</h1>
             <div class="thumb"> 
@@ -499,25 +507,31 @@
         </div>
         <div id="sample3-tabpanel3" role="tabpanel" aria-labelledby="sample3-tab3" option>
           <div class="main-gallery">
-            <h1 class="gallery-title">Happy Birthday</h1>
-            <div class="thumb"> 
+            <h1 class="gallery-title" style="font-size: 5vw;">KnightRiders Winner 2020 <br/> jan - May</h1>
+            <div class="thumb rec"> 
               <!--<div class="bunney"></div>-->
               <amp-img src="https://scontent.fdel1-2.fna.fbcdn.net/v/t1.0-9/31755303_10214635773599371_6009101134814248960_o.jpg?_nc_cat=107&_nc_sid=7aed08&_nc_ohc=bgvV6py8MtwAX-fjUsb&_nc_ht=scontent.fdel1-2.fna&oh=91254a31f6c3f91c6065b20ae58b1fb9&oe=5ED609FC" width="100" height="100" layout="responsive" alt="a sample image"></amp-img>
             </div>
-            <div class="thumb"> 
+            <div class="thumb rec"> 
               <amp-img src="https://scontent.fdel1-3.fna.fbcdn.net/v/t1.0-9/18221686_1218827034881232_2899278183869691712_n.jpg?_nc_cat=111&_nc_sid=85a577&_nc_ohc=2RrgtJwGuKsAX-XQl1N&_nc_ht=scontent.fdel1-3.fna&oh=6072c4df2252f25e21020625541a850d&oe=5ED6D27E" width="100" height="100" layout="responsive" alt="a sample image"></amp-img>
             </div>
-            <div class="thumb"> 
-              <amp-img src="https://aeakanshi.github.io/Birthday_animation/a2.jpg" width="100" height="100" layout="responsive" alt="a sample image"></amp-img>
+            <div class="thumb rec"> 
+              <amp-img src="https://scontent.fdel1-4.fna.fbcdn.net/v/t1.0-9/49007438_2199254820329898_934673063583154176_n.jpg?_nc_cat=105&_nc_sid=8bfeb9&_nc_ohc=6sW_m4JIf3wAX-VoP0x&_nc_ht=scontent.fdel1-4.fna&oh=7bb991af89cae1d47797461d39f4e57f&oe=5EE3DCBD" width="100" height="100" layout="responsive" alt="a sample image"></amp-img>
             </div>
-            <div class="thumb"> 
-              <amp-img src="https://aeakanshi.github.io/Birthday_animation/a3.jpg" width="100" height="100" layout="responsive" alt="a sample image"></amp-img>
+            <div class="thumb rec"> 
+              <amp-img src="https://scontent.fdel1-1.fna.fbcdn.net/v/t31.0-8/27908014_1759298924115743_6372200649219489773_o.jpg?_nc_cat=109&_nc_sid=110474&_nc_ohc=UOJtU-WSx7YAX-BVEcm&_nc_ht=scontent.fdel1-1.fna&oh=31e62278b1e8152534bebbdf07326914&oe=5EE2213F" width="100" height="100" layout="responsive" alt="a sample image"></amp-img>
             </div>
-            <div class="thumb"> 
-              <amp-img src="https://aeakanshi.github.io/Birthday_animation/a4.jpg" width="100" height="100" layout="responsive" alt="a sample image"></amp-img>
+            <div class="thumb rec"> 
+              <amp-img src="https://scontent.fdel1-4.fna.fbcdn.net/v/t1.0-9/49674019_1996449497071401_4839507288718835712_o.jpg?_nc_cat=105&_nc_sid=13bebb&_nc_ohc=P963Vpzl45UAX_xmXDX&_nc_ht=scontent.fdel1-4.fna&oh=9779ae397e612e55f815d02cf35b43e9&oe=5EE588D9" width="100" height="100" layout="responsive" alt="a sample image"></amp-img>
+            </div>
+            <div class="thumb rec">
+              <amp-img src="https://scontent.fdel1-1.fna.fbcdn.net/v/t31.0-8/13041413_10204818779909921_997606687356784795_o.jpg?_nc_cat=110&_nc_sid=7aed08&_nc_ohc=gYM8S3b2skUAX-wG5VO&_nc_ht=scontent.fdel1-1.fna&oh=5b1016a25e25c390ab0060a4df56376b&oe=5EE58BAA" width="100" height="100" layout="responsive" alt="a sample image"></amp-img>
+            </div>
+             <div class="thumb rec"> 
+              <amp-img src="https://scontent.fdel1-4.fna.fbcdn.net/v/t1.0-9/87382912_2771626699572365_4230892950948675584_o.jpg?_nc_cat=100&_nc_sid=7aed08&_nc_ohc=bDmOxI_ySAgAX8ctPv7&_nc_ht=scontent.fdel1-4.fna&oh=f5ec63a227caf30ebc794d7b56759d15&oe=5EE4C1E1" width="100" height="100" layout="responsive" alt="a sample image"></amp-img>
             </div>
             <p class="wishes">
-               "Your special day will bring you lots of happiness, love, and fun. You deserve them a lot. Enjoy!"
+               "Congratulations"
             </p>
           </div>
         </div>
